@@ -50,6 +50,25 @@ Ball.prototype.update = function() {
     this.y += this.velY;
 }
 
+Ball.prototype.collisionDetect = function() {
+    for (let j = 0; j < balls.length; j++) {
+        if (!(this === balls[j])) {
+            const dx = this.x - balls[j].x;
+            const dy = this.y - balls[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < this.radius + balls[j].radius) {
+                balls[j].color = this.color = `rgb(${random(0, 255)}, ${random(0, 255)}, ${random(0, 255)})`;
+                // this.velX *= -1;
+                // this.velY *= -1;
+                // balls[j].velX *= -1;
+                // balls[j].velY *= -1;
+            }
+        }
+
+    }
+}
+
 let balls = [];
 
 while (balls.length < 25) {
@@ -73,6 +92,7 @@ function loop() {
     for (let i = 0; i < balls.length; i++) {
         balls[i].draw();
         balls[i].update();
+        balls[i].collisionDetect();
     }
 
     requestAnimationFrame(loop);
