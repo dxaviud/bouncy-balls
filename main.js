@@ -49,3 +49,33 @@ Ball.prototype.update = function() {
     this.x += this.velX;
     this.y += this.velY;
 }
+
+let balls = [];
+
+while (balls.length < 25) {
+    let radius = random(10, 20);
+    let ball = new Ball(
+        random(0 + radius, width - radius),
+        random(0 + radius, height - radius),
+        random(-7, 7),
+        random(-7, 7),
+        `rgb(${random(0, 255)}, ${random(0, 255)}, ${random(0,255)})`,
+        radius
+    );
+
+    balls.push(ball);
+}
+
+function loop() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+    ctx.fillRect(0, 0, width, height);
+
+    for (let i = 0; i < balls.length; i++) {
+        balls[i].draw();
+        balls[i].update();
+    }
+
+    requestAnimationFrame(loop);
+}
+
+loop();
