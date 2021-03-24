@@ -13,14 +13,27 @@ function random(min, max) {
     return num;
 }
 
-function Ball(x, y, velX, velY, color, radius) {
+function Shape(x, y, velX, velY, exists) {
     this.x = x;
     this.y = y;
     this.velX = velX;
     this.velY = velY;
+    this.exists = exists;
+}
+
+function Ball(x, y, velX, velY, exists, color, radius) {
+    Shape.call(this, x, y, velX, velY, exists);
     this.color = color;
     this.radius = radius;
 }
+
+Ball.prototype = Object.create(Shape.prototype);
+
+Object.defineProperty(Ball.prototype, 'constructor', {
+    value: Ball,
+    enumerable: false,
+    writable: true
+});
 
 Ball.prototype.draw = function() {
     ctx.beginPath();
@@ -52,7 +65,7 @@ Ball.prototype.update = function() {
 
 Ball.prototype.collisionDetect = function() {
     for (let j = 0; j < balls.length; j++) {
-        if (!(this === balls[j])) {
+        if (!(this === balls[j]) && balls[j].exists) {
             const dx = this.x - balls[j].x;
             const dy = this.y - balls[j].y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -69,6 +82,28 @@ Ball.prototype.collisionDetect = function() {
     }
 }
 
+function EvilCircle(x, y, exists) {
+    Shape.call(this, x, y, 20, 20, exists);
+    this.color = 'white';
+    this.radius = 10;
+}
+
+EvilCircle.prototype = Object.create(Shape.prototype);
+
+Object.defineProperty(EvilCircle.prototype, 'constructor', {
+    value: EvilCircle,
+    enumerable: false,
+    writable: true
+});
+
+EvilCircle.prototype.draw = function() {
+    ctx.beginPath();
+    ctx.fillStyle = ctx.strokeStyle;
+    ctx.lineWidth = 3;
+    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+    ctx.stroke();
+}
+
 let balls = [];
 
 while (balls.length < 25) {
@@ -78,6 +113,7 @@ while (balls.length < 25) {
         random(0 + radius, height - radius),
         random(-7, 7),
         random(-7, 7),
+        true,
         `rgb(${random(0, 255)}, ${random(0, 255)}, ${random(0,255)})`,
         radius
     );
