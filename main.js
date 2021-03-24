@@ -1,4 +1,4 @@
-// setup canvas
+// setup
 
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
@@ -6,12 +6,22 @@ const ctx = canvas.getContext("2d");
 const width = canvas.width = window.innerWidth;
 const height = canvas.height = window.innerHeight;
 
+const scoreCounter = document.querySelector("p#score-counter");
+const scoreCounterText = scoreCounter.textContent;
+let remainingBalls = 0;
+
+function updateRemainingBalls() {
+    scoreCounter.textContent = scoreCounterText + remainingBalls;
+}
+
 // function to generate random number
 
 function random(min, max) {
     const num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 }
+
+// constructors and methods
 
 function Shape(x, y, velX, velY, exists) {
     this.x = x;
@@ -153,11 +163,15 @@ EvilCircle.prototype.collisionDetect = function() {
 
             if (distance < this.radius + balls[j].radius) {
                 balls[j].exists = false;
+                remainingBalls--;
+                updateRemainingBalls();
             }
         }
 
     }
 }
+
+// object initialization
 
 let balls = [];
 
@@ -174,6 +188,8 @@ while (balls.length < 25) {
     );
 
     balls.push(ball);
+    remainingBalls++;
+    updateRemainingBalls();
 }
 
 const evilCircle = new EvilCircle(
@@ -181,7 +197,10 @@ const evilCircle = new EvilCircle(
     random(0 + 10, height - 10), 
     true
 );
+
 evilCircle.setControls();
+
+// the loop
 
 function loop() {
     ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
