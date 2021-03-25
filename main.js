@@ -180,8 +180,8 @@ while (balls.length < 25) {
     let ball = new Ball(
         random(0 + radius, width - radius),
         random(0 + radius, height - radius),
-        random(-7, 7),
-        random(-7, 7),
+        random(-5, 5),
+        random(-5, 5),
         true,
         `rgb(${random(0, 255)}, ${random(0, 255)}, ${random(0,255)})`,
         radius
@@ -203,7 +203,12 @@ evilCircle.setControls();
 // the loop
 
 function loop() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+
+    if (remainingBalls === 0) {
+        document.querySelector("h2#gameover").textContent = "YOU WIN!";
+    }
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 1)';
     ctx.fillRect(0, 0, width, height);
 
     for (let i = 0; i < balls.length; i++) {

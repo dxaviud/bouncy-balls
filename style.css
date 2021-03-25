@@ -32,3 +32,11 @@ p {
     right: 5px;
     color: #aaa;
 }
+
+h2#gameover {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    color: #aaa;
+    font-size: 5rem;
+}
